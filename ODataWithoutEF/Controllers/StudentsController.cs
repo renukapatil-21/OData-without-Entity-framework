@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -16,17 +16,19 @@ namespace ODataWithoutEF.Controllers
         
         public IEnumerable<Student> Get()
         {
-            return db.GetStudent().ToList();
+            return db.GetStudent();
         }
 
+        [EnableQuery]
         [HttpGet(nameof(GetById))]
         public IEnumerable<Student> GetById(int Id)
         {
-            db.GetStudent().Where(model => model.Id == Id).FirstOrDefault();
+            var result = db.GetStudent().Where(model => model.Id == Id);
             
-            return default;
+            return result;
         }
-       
+
+        [EnableQuery]
         public void Post([FromBody] Student obj)
         {
             if (ModelState.IsValid == true)
@@ -39,7 +41,7 @@ namespace ODataWithoutEF.Controllers
             }
         }
 
-        // PUT api/<EmpController>/5
+        [EnableQuery]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Student obj)
         {
@@ -49,7 +51,7 @@ namespace ODataWithoutEF.Controllers
             }
         }
 
-        // DELETE api/<EmpController>/5
+        [EnableQuery]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
